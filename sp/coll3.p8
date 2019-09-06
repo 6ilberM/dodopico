@@ -11,7 +11,7 @@ actor = {} --all actors in world
 -- x,y means center of the actor
 -- in map tiles (not pixels)
 function make_actor(x, y)
- a={}
+local a={}
  a.x = x
  a.y = y
  a.dx = 0
@@ -39,7 +39,6 @@ function _init()
  -- make player top left
  pl = make_actor(2,2)
  pl.spr = 17
- 
  -- make a bouncy ball
  local ball = make_actor(8.5,7.5)
  ball.spr = 33
@@ -53,8 +52,7 @@ function _init()
  ball.dy=0.15
  ball.inertia=1
  ball.bounce = 0.8
- 
- 
+
  -- tiny guy
  
  a = make_actor(7,5)
@@ -62,8 +60,6 @@ function _init()
  a.frames=4
  a.dx=1/8
  a.inertia=0.8
- 
- 
 end
 
 -- for any given point on the

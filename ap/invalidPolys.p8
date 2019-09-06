@@ -1,0 +1,78 @@
+pico-8 cartridge // http://www.pico-8.com
+version 18
+__lua__
+-- invalid poly
+function _ma(x,y)
+	local a= {}
+	a.x=x a.y=y
+	a.dx=0 a.dy=0
+	a.col=7 a.frame=0
+	add(points,a)
+	return a
+end
+
+function _init()
+	frame = 0
+	points={}
+end
+
+shoot =false 
+lock1=false
+function _update()
+	foreach(points,upos)
+	if btnp(❎) then	shoot =true
+	else shoot=false lock1=false
+	end
+	if shoot and not lock1 then
+	makepixel() lock1=true
+end
+frame+=1
+end
+
+function makepixel()
+	local pt = _ma(64,64)
+	pt.dx= rnd(2)-1
+	pt.dy= rnd(2)-1
+end
+
+function _draw()
+ cls()
+	foreach(points,ptprint)
+	for i= 1,count(points) do 
+	if i>1 then
+	 local p,c
+	 p=points[i-1] c=points[i]
+	 line(p.x,p.y,c.x,c.y)
+	 end
+	 if #points>2 then
+	 line(points[#points].x,
+	 points[#points].y,points[1].x,points[1].y)
+	end
+	end
+end
+-->8
+-- GFX
+function ptprint(p)
+	pset(p.x,p.y,p.col)
+end
+
+-->8
+-- iterstuff
+function upos(a)
+	if a.x>127 or a.x<10
+	or a.y>127 or a.y<10
+	then	
+		a.col=10
+	del(points,a)
+	else 
+	a.x+=a.dx a.y+=a.dy 
+end
+end
+
+__gfx__
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

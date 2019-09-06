@@ -40,11 +40,14 @@ function _update60()
  
  -- move ball up/down
 
- if bally+vely < 0+size or
+ if --bally+vely < 0+size 
+ false
+ 	or
     bally+vely > floor_y-size
+    
  then
   -- bounce on floor/ceiling
-  vely = vely * -0.5
+  vely = vely * -1
   sfx(0)
   -- if bounce was too small,
   -- bump into air
@@ -60,7 +63,7 @@ function _update60()
  end
  
  -- gravity!
- vely+= 0.25
+ vely+= 0.223
  -- press a button to randomly
  -- choose a new velocity
  if (btnp(5)) then
