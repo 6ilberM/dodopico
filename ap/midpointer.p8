@@ -6,8 +6,8 @@ function _ma(x,y)
 	local a= {}
 	a.x=x a.y=y
 	a.dx=0 a.dy=0
-	a.col=7 a.frame=0
-	a.deg=0
+	a.col=rnd(2)+7 a.frame=0
+	a.deg=0 a.rate= min(rnd(1),.1)
 	add(points,a)
 	return a
 end
@@ -49,11 +49,12 @@ end
 -->8
 -- iterstuff
 function upos(a)
+a.frame+=a.rate
 rotate(64,64,10,a)
 end
-degrees =0
+
 function rotate(x, y, radius, pt)
-  pt.deg -= pt.frame/10
+  pt.deg -= pt.deg+1*((pt.frame)/5) 
   --We update star's position by incrementing the degrees and using our formula
   -- x + (radius * cosine(degrees)) = a point on the edge of the circle in the x-axis
   -- y + (radius * sine(degrees)) = a point of the edge of the circle in the y-axis
