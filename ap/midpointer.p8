@@ -3,28 +3,28 @@ version 18
 __lua__
 -- neo midpointer 🐱
 
-const = {}
+const = {} field={}
 	const.pi = 3.141592653589793238
 	const.twopi =const.pi*2
-	const.radius=17
-	const.hexsize=40
+
+	field.radius=10
+	field.polysize=45
+	field.sides=1
 
 function _init()
 	frame = 0 points={} circles={}
-	-- polygon(30,6)
-	make_hexagon(64,64)
+	polygon(64,64,field.sides)
 end
 
 
 shoot =false  lock1=false
+shoot2 =false  lock2=false
 function _update60()
+local oldsides=field.sides
 	foreach(circles,updatecirc)
 	foreach(points,upos)
-	if btn(4) then	shoot =true
-	else shoot=false lock1=false end
-	if shoot and not lock1 then
-	--Do something here
-	lock1=true end
+if btnp(5) then field.sides +=1 elseif btnp(4) and(field.sides-1)>2  then field.sides-=1 end	
+	if field.sides!=oldsides then _init() end
 end
 
 function _draw() cls() 
@@ -44,17 +44,18 @@ function ptprint(p)
 	pset(p.x,p.y,p.col)
 end
 
+-- (i%#cols)+1
 function printoutline()
-local cols={7,8,12}
--- local cols={7}
+-- local cols={7,12}
 	for i= 1,count(points) do 
 	if i>1 then
 	 local p,c
 	 p=points[i-1] c=points[i]
-	 line(p.x,p.y,c.x,c.y,cols[(i%#cols)+1])
+	 line(p.x,p.y,c.x,c.y,7)
 	 end
 	 if #points>2 then
-	 line(points[#points].x,points[#points].y,points[1].x,points[1].y,cols[1+(i%#cols)])
+	 line(points[#points].x,points[#points].y,
+	 points[1].x,points[1].y,7)
 	end
 	end
 end
@@ -80,25 +81,6 @@ function rotate(x, y, radius, pt)
   pt.y = y + (radius * sin(pt.deg))  
 end
 
-function polygon(radius,npoints)
-angle = (const.twopi)/npoints
-local i=0
-local deltatime=0
-while i<(const.twopi) do
-	local v={}
-	v.x=64+cos(i)*radius
-	v.y=64+sin(i)*radius
-	i+= angle
-	local c=makecirc(v.x,v.y,const.radius)
-	c.point.frame=deltatime
-	deltatime+=.25
-	end
-end
-
-function ccircle(obj)
-	local c=makecirc(obj.x,obj.y,const.radius)
-	c.point.frame=rnd(2)-1
-end
 
 -->8
 --makers 😐
@@ -112,12 +94,17 @@ function makept(x,y)
 	return a
 end
 
-function make_hexagon(x,y)
+function polygon(x,y,npoints)
      obj={}
-     for i=0,5 do
-         add(obj,{x=x+sin(i/6)*const.hexsize,y=y+cos(i/6)*const.hexsize})
+     for i=1,npoints do
+         add(obj,{x=x+sin(i/npoints)*field.polysize,y=y+cos(i/npoints)*field.polysize})
      end
 	 foreach(obj,ccircle)
+end
+
+function ccircle(obj)
+	local c=makecirc(obj.x,obj.y,field.radius)
+	c.point.frame=rnd(2)-1
 end
 
 function makecirc(x,y,rad)
