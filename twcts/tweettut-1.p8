@@ -14,7 +14,7 @@ circfill(64+sin(-t()/2)*s/2,64
 circfill(64+sin(t()/2)*s/4,64
 +cos(t()/2)*s/4,1,7)
 									
-for i=1,1 do 
+for i=1,250 do 
  x=rnd(128)
  y=rnd(128)
  for j=2,#palette do 
