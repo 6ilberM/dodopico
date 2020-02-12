@@ -115,7 +115,7 @@ function makecirc(x,y,rad)
 	local c= {} c.x=x c.y=y
 	c.rad=rad 
 	c.point= makept(x,y)
-	c.frame= rnd(6)-3
+	c.point.frame= (rnd(12)-6) 
 	c.ID = #circles+1
 	add(circles,c)
 	return c
