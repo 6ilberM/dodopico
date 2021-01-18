@@ -12,39 +12,41 @@ txt = split("i,♥,milagros")
 x = 64-20
 y = 64
 
-actors= {}
+world= {}
 
 for i=1,3 do
 a = {}
  
 a.txt = txt[i] 
-a.x = x+i*8
+a.x = x+(i-1) * 8
 a.y = y
-
-add(actors,a)
+a.dx=1
+a.dy=0
+a.col = 8
+add(world,a)
 end
  
 end
 
 function _update()
-
 rate+=1/30
 
 for i=1,3 do
-actors[i].y= 64 + (10 * sin(i/8+rate))
-end
 
+world[i].y= (10 * sin(world[i].x+i/4+rate))
+world[i].y+= (10 * sin( i/2+rate)/time())
+world[i].y+= 64
+if rate % 2 == 0 then
+world[i].col= rnd(6 ,8) end
+end
 end
 
 function _draw()
 cls()
 
 for i=1,3 do
- print(actors[i].txt, actors[i].x, actors[i].y, 8) 
+ print(world[i].txt, world[i].x, world[i].y, world[i].col) 
 end
-
-
-
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
