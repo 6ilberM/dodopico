@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 27
+version 29
 __lua__
 -- 6ilberm rottirangle
  
@@ -26,8 +26,8 @@ foreach(pts,ups)
 end
 
 function _draw()
-cls()
-frame+=1/1200
+
+frame+=1/30
 foreach(pts,dcirc)
 end
 

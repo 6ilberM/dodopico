@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 18
+version 29
 __lua__
 actor = {}
 
@@ -25,7 +25,7 @@ function make_actor(x,y)
 	a.gfs= 1
 	
 	a.speed= 1/1.5
-	a.jumpForce=sqrt(a.gfs*gravity*2)
+	a.jumpForce=sqrt(a.gfs*gravity*120)
 	a.flipped=false
 
 	add(actor,a)
