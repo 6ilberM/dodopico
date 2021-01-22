@@ -36,6 +36,8 @@ midpointtable={}
 	foreach(points,upos)
 	add(midpointtable,getmidpoints(circles))
 
+	depth = (6 * sin(time()/4.5))+ 6
+
 	if depth>1 then
 		for i = 2, depth,1 do
 			if i==2 then
