@@ -15,7 +15,7 @@ function _init()
 	frame = 0 
 	depth = 0 
 	dt= 0
-	midointTable= {}
+	midpointtable= {}
 	 circles={} points={} 
 	polygon(64,64,field.sides)
 	local pts={}
@@ -29,26 +29,32 @@ shoot =false  lock1=false
 shoot2 =false  lock2=false
 
 function _update()
-midointTable={}
+midpointtable={}
 	dt= 1/30
+	input()
 	foreach(circles,updatecirc)
 	foreach(points,upos)
-	add(midointTable,getmidpoints(circles))
-	if depth>=2 then 
-		for i = 2, depth,1 do
+	add(midpointtable,getmidpoints(circles))
 
-		end 
+	if depth>1 then
+		for i = 2, depth,1 do
+			if i==2 then
+		 		add(midpointtable,getmidpoints2(midpointtable[1])) 
+			else
+				add(midpointtable,getmidpoints2(midpointtable[i-1]))
+			end
+		end
 	end
-	input()
 end
 
-function _draw() cls() 
+function _draw() 
+cls() 
 	foreach(circles,circprint) 
 	foreach(points,ptprint)
 	printoutline(points[1],7)
 	if depth>=1 then
 	for i =1, depth , 1 do
-	printoutline(midointTable[i],8+i)
+	printoutline(midpointtable[i],7+i)
 	end
 end
 	-- print("CPU:"..stat(2),2,2)
@@ -122,10 +128,23 @@ function getmidpoints(container)
 	 return midpoints
 end
 
+function getmidpoints2(container)
+	local midpoints = {}
+	for i=1, count(container) do
+		if i == 1  then 
+		 add(midpoints,midpoint(container[i],container[count(container)]))
+		else
+		add(midpoints,midpoint(container[i-1],container[i]))
+		end
+	 end
+
+	 return midpoints
+end
+
 function midpoint(pt1,pt2)
 	local pt={}
 	pt.x= (pt1.x+pt2.x)/2
-	pt.y= (pt1.y +pt2.y)/2
+	pt.y= (pt1.y+pt2.y)/2
 	return pt
 end
 
@@ -160,12 +179,14 @@ function input()
 	if field.sides!=oldsides then _init() end
 	if btnp(4) then
 	 depth+=1 
+
 	 end
 	if btnp(5) then
 	 if depth-1>=0
 	 then 
 	 depth-=1 
 	 end
+
 	end
 end
 
