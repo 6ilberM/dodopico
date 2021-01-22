@@ -14,6 +14,7 @@ __lua__
 function _init()
 	frame = 0 
 	depth = 0 
+	depthmax = 6 
 	dt= 0
 	midpointtable= {}
 	 circles={} points={} 
@@ -36,7 +37,7 @@ midpointtable={}
 	foreach(points,upos)
 	add(midpointtable,getmidpoints(circles))
 
-	depth = (6 * sin(time()/4.5))+ 6
+	depth = (depthmax * sin(time()/4.5)) + depthmax
 
 	if depth>1 then
 		for i = 2, depth,1 do
@@ -59,7 +60,7 @@ cls()
 	printoutline(midpointtable[i],7+i)
 	end
 end
-	-- print("CPU:"..stat(2),2,2)
+	print("depth:"..depthmax.."🐱",2,2)
 	-- print(midpoints[]],2,2)
 	-- field.colchange-=0.035
 	-- ratedebug()
@@ -180,13 +181,13 @@ function input()
 	(field.sides-1)>1 then field.sides-=1 end	
 	if field.sides!=oldsides then _init() end
 	if btnp(4) then
-	 depth+=1 
+	 depthmax+=1 
 
 	 end
 	if btnp(5) then
-	 if depth-1>=0
+	 if depthmax-1>=0
 	 then 
-	 depth-=1 
+	 depthmax-=1 
 	 end
 
 	end
