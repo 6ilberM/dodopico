@@ -33,7 +33,7 @@ midointTable={}
 	dt= 1/30
 	foreach(circles,updatecirc)
 	foreach(points,upos)
-	add(midointTable,getmidpoints())
+	add(midointTable,getmidpoints(circles))
 	if depth>=2 then 
 		for i = 2, depth,1 do
 
@@ -109,13 +109,13 @@ function makept(x,y)
 	return a
 end
 
-function getmidpoints()
+function getmidpoints(container)
 	local midpoints = {}
-	for i=1, count(circles) do
+	for i=1, count(container) do
 		if i == 1  then 
-		 add(midpoints,midpoint(circles[i].point,circles[count(circles)].point))
+		 add(midpoints,midpoint(container[i].point,container[count(container)].point))
 		else
-		add(midpoints,midpoint(circles[i-1].point,circles[i].point))
+		add(midpoints,midpoint(container[i-1].point,container[i].point))
 		end
 	 end
 
