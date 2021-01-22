@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 18
+version 29
 __lua__
 -- neo midpointer 🐱
 
@@ -12,7 +12,11 @@ __lua__
 	-- easiest way is to create metametatables
 		
 function _init()
-	frame = 0  circles={} points={} 
+	frame = 0 
+	depth = 0 
+	dt= 0
+	midointTable= {}
+	 circles={} points={} 
 	polygon(64,64,field.sides)
 	local pts={}
 	for i=1,count(circles) do 
@@ -24,23 +28,35 @@ end
 shoot =false  lock1=false
 shoot2 =false  lock2=false
 
-function _update60()
+function _update()
+midointTable={}
+	dt= 1/30
 	foreach(circles,updatecirc)
 	foreach(points,upos)
+	add(midointTable,getmidpoints())
+	if depth>=2 then 
+		for i = 2, depth,1 do
+
+		end 
+	end
 	input()
 end
 
 function _draw() cls() 
 	foreach(circles,circprint) 
 	foreach(points,ptprint)
-	printoutline(points[1])
+	printoutline(points[1],7)
+	if depth>=1 then
+	for i =1, depth , 1 do
+	printoutline(midointTable[i],8+i)
+	end
+end
 	-- print("CPU:"..stat(2),2,2)
+	-- print(midpoints[]],2,2)
 	-- field.colchange-=0.035
 	-- ratedebug()
 end
 
--->8
--- GFX
 function circprint(c)
 	circ(c.x,c.y,c.rad,1)
 	print(c.ID,c.x-1,c.y-1,c.ID+field.colchange)
@@ -53,23 +69,20 @@ function ptprint(p)
 end
 
 -- (i%#cols)+1
-function printoutline(pl)
+function printoutline(pl,color)
 -- local cols={7,12}
 	for i= 1,count(pl) do 
 	if i>1 then
 	 	local p,c
 	 	p=pl[i-1] c=pl[i]
-	 	line(p.x,p.y,c.x,c.y,7)
-	 	end
-	 if #pl>2 then
+	 	line(p.x,p.y,c.x,c.y,color)
+	 elseif i==1 then
 	 	line(pl[#pl].x,pl[#pl].y,
-	 	pl[1].x,pl[1].y,7)
+	 	pl[1].x,pl[1].y,color)
 		end
 	end
 end
 
--->8
--- iterstuff
 function upos(a)
 	for k,v in pairs(a) do 
 		v.frame+=1*v.rate
@@ -82,20 +95,38 @@ function updatecirc(c)
 end
 
 function rotate(x, y, radius, pt)
-  pt.deg -= pt.deg+1*((pt.frame)/10)
+  pt.deg = pt.frame * dt
+  if pt.deg>1 then pt.frame=0 end
   pt.x = x + (radius * cos(pt.deg))
   pt.y = y + (radius * sin(pt.deg))  
 end
-
--->8
---makers 😐
 
 function makept(x,y)
 	local a= {}
 	a.x=x a.y=y
 	a.col=rnd(2)+7 a.frame= 0
-	a.deg=0 a.rate=rnd(1)/field.sides/3.5
+	a.deg=0 a.rate=1/10
 	return a
+end
+
+function getmidpoints()
+	local midpoints = {}
+	for i=1, count(circles) do
+		if i == 1  then 
+		 add(midpoints,midpoint(circles[i].point,circles[count(circles)].point))
+		else
+		add(midpoints,midpoint(circles[i-1].point,circles[i].point))
+		end
+	 end
+
+	 return midpoints
+end
+
+function midpoint(pt1,pt2)
+	local pt={}
+	pt.x= (pt1.x+pt2.x)/2
+	pt.y= (pt1.y +pt2.y)/2
+	return pt
 end
 
 function polygon(x,y,npoints)
@@ -121,26 +152,21 @@ function makecirc(x,y,rad)
 	return c
 end
 
--->8
--- Utils
 function input()
 	local oldsides=field.sides
 	if btnp(1) and (field.sides+1)<13 
 	then field.sides +=1 elseif btnp(0) and 
 	(field.sides-1)>1 then field.sides-=1 end	
 	if field.sides!=oldsides then _init() end
-	if btnp(4) then  end
-	if btnp(5) then  end
-end
-
-function ratedebug()
-	local averagespd=0
-	for k,v in pairs(points[1]) do
-		averagespd+=v.rate
+	if btnp(4) then
+	 depth+=1 
+	 end
+	if btnp(5) then
+	 if depth-1>=0
+	 then 
+	 depth-=1 
+	 end
 	end
-	if #points[1]<0 then return end
-	averagespd/=#points[1]
-	print(#points[1].." average speed "..averagespd,2,2)
 end
 
 __gfx__
